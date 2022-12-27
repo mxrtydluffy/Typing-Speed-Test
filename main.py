@@ -1,0 +1,1 @@
+print("Hello World I'm tynra code a s[eed test!!!")
