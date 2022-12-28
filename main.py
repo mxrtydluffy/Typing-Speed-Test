@@ -9,6 +9,7 @@ import time
 def start_screen(stdscr):
     stdscr.clear()
     stdscr.addstr("Welcome to Speed Typing Test!")
+    stdscr.addstr("\nMake sure the words are correctly typed inorder to get your score!\n")
     stdscr.addstr("\nPress any key to begin!\n")
     stdscr.refresh()
     stdscr.getkey()
@@ -33,9 +34,9 @@ def display_text(stdscr, target, current, wpm=0):
     for i, char in enumerate(current):
         # Check for correct letters being typed
         correct_char = target[i]
-        color = curses.color_pair(2)
+        color = curses.color_pair(1)
         if char != correct_char:
-            color = curses.color_pair(3)
+            color = curses.color_pair(2)
 
         stdscr.addstr(0, i, char, color)
 
@@ -50,7 +51,7 @@ def wpm_test(stdscr):
     This calculation is rounded down
     """
 
-    target_text = ("According to all known laws of aviation, there is no way a bee should be able to fly. Its wings are too small to get its fat little body off the ground. The bee, of course, flies anyway because bees don't care what humans think is impossible. Yellow, black. Yellow, black. Yellow, black. Yellow, black. Ooh, black and yellow! Let's shake it up a little. Barry! Breakfast is ready! Coming! Hang on a second. Hello? Barry? Adam? Can you believe this is happening? I can't. I'll pick you up. Looking sharp. Use the stairs, Your father paid good money for those. Sorry. I'm excited.")
+    target_text = ("The dog barks. The cat meows. The chicken quacks. The pig oinks. The mouse squeaks. The snake hiss. The bee buzz. The lion roar. The tiger growl. The frog croak. The cow moo. The owl hoot.")
     current_text = []
     wpm = 0
     # Very large number | Stores epoch
@@ -114,9 +115,8 @@ def main(stdscr):
     """
 
     #pairing of a foreground color an a background color.
-    curses.init_pair(1, curses.COLOR_CYAN, curses.COLOR_BLACK)
-    curses.init_pair(2, curses.COLOR_GREEN, curses.COLOR_BLACK)
-    curses.init_pair(3, curses.COLOR_RED, curses.COLOR_BLACK)
+    curses.init_pair(1, curses.COLOR_GREEN, curses.COLOR_BLACK)
+    curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)
     
     start_screen(stdscr)
     while True:
