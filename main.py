@@ -8,25 +8,37 @@ from curses import wrapper
 def start_screen(stdscr):
     stdscr.clear()
     stdscr.addstr("Welcome to Speed Typing Test!")
-    stdscr.addstr("\nPress any key to begin!")
+    stdscr.addstr("\nPress any key to begin!\n")
     stdscr.refresh()
     stdscr.getkey()
 
 def display_text(stdscr, target, current, wpm=0):
+
+    """
+    #30-37
+    Then loop through every character/keys in a for loop the user types 
+    by storing it in a list. Then display the charater on the screen.
+    Enumerate gets current text as well as the index in the list.
+    "i" is equal to 0, 0 is going to reference beginning of list 
+    and char is going to reference the first letter. In addition
+    the character the user is on, like 1, 2 or 3, (index on the list)
+    we must determine where the character should be placed.
+    Here "i" will get incremented by 1.
+    """
+
     stdscr.addstr(target)
 
-    # Then loop through every character/ keys in a for loop the user types by storing it in a list.
-    # Then display the charater on the screen.
-    # enumerate gets current text as well as the index in the list.
-    # i is equal to 0, 0 is going to reference beginning of list and char is going to reference the first letter.
-    # In addition the chacter the user is on, like 1, 2 or 3, (index on the list) we must determine where the character
-    # should be placed. Here "i" will get incremented by 1.
-
     for i, char in enumerate(current):
-        stdscr.addstr(0, i, char, curses.color_pair(2))
+        # Check for correct letters being typed
+        correct_char = target[i]
+        color = curses.color_pair(2)
+        if char != correct_char:
+            color = curses.color_pair(3)
+
+        stdscr.addstr(0, i, char, color)
 
 def wpm_test(stdscr):
-    target_text = "Hello world lets type some text! Thye cow says moo."
+    target_text = "Hello world lets type some text! The cow says moo."
     current_text = []
 
     # Waits for user to type something then it append to the current text.
@@ -67,7 +79,7 @@ def main(stdscr):
     #pairing of a foreground color an a background color.
     curses.init_pair(1, curses.COLOR_CYAN, curses.COLOR_BLACK)
     curses.init_pair(2, curses.COLOR_GREEN, curses.COLOR_BLACK)
-    curses.init_pair(3, curses.COLOR_WHITE, curses.COLOR_BLACK)
+    curses.init_pair(3, curses.COLOR_RED, curses.COLOR_BLACK)
     
     start_screen(stdscr)
     wpm_test(stdscr)
