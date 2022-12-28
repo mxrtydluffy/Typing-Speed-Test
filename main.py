@@ -1,6 +1,6 @@
 # Allows styling of the terminal
 import curses
-#initallizes curses module which takes over the terminal
+# Initallizes curses module which takes over the terminal
 # and helps runs different commands from it.
 from curses import wrapper
 
@@ -12,6 +12,19 @@ def start_screen(stdscr):
     stdscr.refresh()
     stdscr.getkey()
 
+def display_text(stdscr, target, current, wpm=0):
+    stdscr.addstr(target)
+
+    # Then loop through every character/ keys in a for loop the user types by storing it in a list.
+    # Then display the charater on the screen.
+    # enumerate gets current text as well as the index in the list.
+    # i is equal to 0, 0 is going to reference beginning of list and char is going to reference the first letter.
+    # In addition the chacter the user is on, like 1, 2 or 3, (index on the list) we must determine where the character
+    # should be placed. Here "i" will get incremented by 1.
+
+    for i, char in enumerate(current):
+        stdscr.addstr(0, i, char, curses.color_pair(2))
+
 def wpm_test(stdscr):
     target_text = "Hello world lets type some text! Thye cow says moo."
     current_text = []
@@ -21,13 +34,7 @@ def wpm_test(stdscr):
         # Helps clear the screen because if it doesn't it will repeat the text a ton of times.
         # Not clearing what the previous text says.
         stdscr.clear()
-        stdscr.addstr(target_text)
-
-        # Then loop through every character/ keys in a for loop the user types by storing it in a list.
-        # Then display the charater on the screen 
-        for char in current_text:
-            stdscr.addstr(char, curses.color_pair(2))
-
+        display_text(stdscr, target_text, current_text)
         stdscr.refresh()
 
         key = stdscr.getkey()
@@ -35,7 +42,7 @@ def wpm_test(stdscr):
         # In ASCII/unicode representation  27 is the number for escape
         if ord(key) == 27:
             break
-        
+
         # Backspace on different operating systems can be represented in different characters.
         if key in ("KEY_BACKSPACE", '\b', "\x7f"):
             if len(current_text) > 0:
