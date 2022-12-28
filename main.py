@@ -1,6 +1,6 @@
 # Allows styling of the terminal
 import curses
-# Initallizes curses module which takes over the terminal
+# Initializes curses module which takes over the terminal
 # and helps runs different commands from it.
 from curses import wrapper
 import time
@@ -17,11 +17,11 @@ def display_text(stdscr, target, current, wpm=0):
 
     """
     #30-37
-    Then loop through every character/keys in a for loop the user types 
-    by storing it in a list. Then display the charater on the screen.
+    Loops through every character/keys in a for loop the user types 
+    by storing it in a list. Then display the character on the screen.
     Enumerate gets current text as well as the index in the list.
     "i" is equal to 0, 0 is going to reference beginning of list 
-    and char is going to reference the first letter. In addition
+    and "char" is going to reference the first letter. In addition
     the character the user is on, like 1, 2 or 3, (index on the list)
     we must determine where the character should be placed.
     Here "i" will get incremented by 1.
@@ -40,28 +40,31 @@ def display_text(stdscr, target, current, wpm=0):
         stdscr.addstr(0, i, char, color)
 
 def wpm_test(stdscr):
-    target_text = "Hello world lets type some text! The cow says moo."
+
+    """
+    #67
+    Calculation to determing wpm.
+    Number or words is calculated when the number of characters is divided by 5.
+    Therefore, Number of Words = Total Keys Typed / 5
+    WPM = Total Number of Words / Time Elasped in Minutes
+    This calculation is rounded down
+    """
+
+    target_text = ("According to all known laws of aviation, there is no way a bee should be able to fly. Its wings are too small to get its fat little body off the ground. The bee, of course, flies anyway because bees don't care what humans think is impossible. Yellow, black. Yellow, black. Yellow, black. Yellow, black. Ooh, black and yellow! Let's shake it up a little. Barry! Breakfast is ready! Coming! Hang on a second. Hello? Barry? Adam? Can you believe this is happening? I can't. I'll pick you up. Looking sharp. Use the stairs, Your father paid good money for those. Sorry. I'm excited.")
     current_text = []
     wpm = 0
     # Very large number | Stores epoch
     start_time = time.time()
-    # Nodelay is basically telling to not delay waiting for the user to press a key.
+    # Nodelay is basically telling to not delay by waiting for the user to press a key.
     stdscr.nodelay(True)
 
     # Waits for user to type something then it append to the current text.
     while True:
-        # Time elapsed is going to be 0 sec since the time between we calcualted this is going to be the exact same time.
+        # Time elapsed is going to be 0 sec since the time between we calculated this is going to be the exact same time.
         # If time.time() & start_time is 0 it will give the max of 1. This is implemented to not to divide 0 by 0
         time_elapsed = max(time.time() - start_time, 1)
 
-
-        # Calculation to determing wpm.
-        # Number or words is calcualted when the number of characters is divided by 5.
-        # Therefore, Number of Words = Total Keys Typed / 5
-        # WPM = Total Number of Words / Time Elasped in Minutes
-        # This calculation is rounded down
         wpm = round((len(current_text) / (time_elapsed / 60)) / 5)
-
 
         # Helps clear the screen because if it doesn't it will repeat the text a ton of times.
         # Not clearing what the previous text says.
@@ -77,8 +80,8 @@ def wpm_test(stdscr):
             # Breaks outside of while loop
             break
 
-        # "stdscr.getkey() is a block meaning it does nothing unitl user types the key."
-        # try allows to not let program crash. If it does except is executed and continue beings back at while loop.
+        # "stdscr.getkey()" is a block meaning it does nothing unitl user types the key.
+        # "try" allows to not let program crash. If it does "except" is executed and continue beings back at while loop.
         try:
             key = stdscr.getkey()
         except:
@@ -102,13 +105,14 @@ def main(stdscr):
 
     """
     STD screen aka standard output which is the terminal
-    since its where we're writing stuff out to.
+    since its where user is writing stuff out to.
     - std.scr.clear() clears the entire screen
     - stdscr.addstr adds the string printed out to the console.
     - stdscr.refresh() once you start typing need to refresh the screen.
-    - getkey() Waits for the user to type something so it doesn't immediealty close the program
+    - getkey() Waits for the user to type something so it doesn't immediately close the program
     right away. User types and then it finishes.
     """
+
     #pairing of a foreground color an a background color.
     curses.init_pair(1, curses.COLOR_CYAN, curses.COLOR_BLACK)
     curses.init_pair(2, curses.COLOR_GREEN, curses.COLOR_BLACK)
