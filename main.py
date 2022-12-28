@@ -69,6 +69,14 @@ def wpm_test(stdscr):
         display_text(stdscr, target_text, current_text, wpm)
         stdscr.refresh()
 
+        # Check if user text is equal to whatever the target text is.
+        # Can do this by converting list to string to check if it matches the targeted text.
+        # Here it combines every single character form this list 
+        if "".join(current_text) == target_text:
+            stdscr.nodelay(False)
+            # Breaks outside of while loop
+            break
+
         # "stdscr.getkey() is a block meaning it does nothing unitl user types the key."
         # try allows to not let program crash. If it does except is executed and continue beings back at while loop.
         try:
@@ -107,7 +115,14 @@ def main(stdscr):
     curses.init_pair(3, curses.COLOR_RED, curses.COLOR_BLACK)
     
     start_screen(stdscr)
-    wpm_test(stdscr)
+    while True:
+        # Going to return function.
+        wpm_test(stdscr)
 
-#Calls function
+        stdscr.addstr(2, 0, "You completed the Speed Writing Test! Press any key to to continue...")
+        key = stdscr.getkey()
+
+        if ord(key) == 27:
+            break
+
 wrapper(main)
