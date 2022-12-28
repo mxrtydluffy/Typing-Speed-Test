@@ -7,8 +7,8 @@ from curses import wrapper
 
 def start_screen(stdscr):
     stdscr.clear()
-    stdscr.addstr("Welcome to Speed Tyoping Test!")
-    stdscr.addstr("\nPress enter to begin!")
+    stdscr.addstr("Welcome to Speed Typing Test!")
+    stdscr.addstr("\nPress any key to begin!")
     stdscr.refresh()
     stdscr.getkey()
 
@@ -16,39 +16,40 @@ def wpm_test(stdscr):
     target_text = "Hello world lets type some text! Thye cow says moo."
     current_text = []
 
-    stdscr.getkey()
-
     # Waits for user to type something then it append to the current text.
     while True:
+        # Helps clear the screen because if it doesn't it will repeat the text a ton of times.
+        # Not clearing what the previous text says.
         stdscr.clear()
         stdscr.addstr(target_text)
 
         # Then loop through every character/ keys in a for loop the user types by storing it in a list.
         # Then display the charater on the screen 
         for char in current_text:
-            stdscr.addstr(char, curses.color_pair(1))
+            stdscr.addstr(char, curses.color_pair(2))
 
         stdscr.refresh()
 
         key = stdscr.getkey()
 
-        # In ASCII 27 is the number for escape
+        # In ASCII/unicode representation  27 is the number for escape
         if ord(key) == 27:
             break
-
-        current_text.append(key)
-
-
-        # Helps clear the screen because if it doesn't it will repeat the text a ton of times.
-        # Not clearing what the previous text says.
-        stdscr.clear()
-        stdscr.addstr(target_text)
+        
+        # Backspace on different operating systems can be represented in different characters.
+        if key in ("KEY_BACKSPACE", '\b', "\x7f"):
+            if len(current_text) > 0:
+                # Since current text is keeping track of all the keys being typed.
+                # We want to get rid of the last text being input.
+                current_text.pop()
+        else:
+            current_text.append(key)
         
 
 def main(stdscr):
 
     """
-    STD screen aka standaard output which is the terminal
+    STD screen aka standard output which is the terminal
     since its where we're writing stuff out to.
     - std.scr.clear() clears the entire screen
     - stdscr.addstr adds the string printed out to the console.
