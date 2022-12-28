@@ -1,4 +1,4 @@
-# Typing-Speed_Test
+# Typing-Speed-Test
 Python project that imports curses, time and wrapper.
 
 # Overview
