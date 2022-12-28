@@ -1,5 +1,5 @@
 # Typing-Speed_Test
-Python project that uses curses, time and wrapper.
+Python project that imports curses, time and wrapper.
 
 # Overview
 This typing speed test calculates word speed count from a single line.
