@@ -3,6 +3,7 @@ import curses
 # Initallizes curses module which takes over the terminal
 # and helps runs different commands from it.
 from curses import wrapper
+import time
 
 
 def start_screen(stdscr):
@@ -27,6 +28,7 @@ def display_text(stdscr, target, current, wpm=0):
     """
 
     stdscr.addstr(target)
+    stdscr.addstr(1, 0, f"WPM: {wpm}")
 
     for i, char in enumerate(current):
         # Check for correct letters being typed
@@ -40,16 +42,39 @@ def display_text(stdscr, target, current, wpm=0):
 def wpm_test(stdscr):
     target_text = "Hello world lets type some text! The cow says moo."
     current_text = []
+    wpm = 0
+    # Very large number | Stores epoch
+    start_time = time.time()
+    # Nodelay is basically telling to not delay waiting for the user to press a key.
+    stdscr.nodelay(True)
 
     # Waits for user to type something then it append to the current text.
     while True:
+        # Time elapsed is going to be 0 sec since the time between we calcualted this is going to be the exact same time.
+        # If time.time() & start_time is 0 it will give the max of 1. This is implemented to not to divide 0 by 0
+        time_elapsed = max(time.time() - start_time, 1)
+
+
+        # Calculation to determing wpm.
+        # Number or words is calcualted when the number of characters is divided by 5.
+        # Therefore, Number of Words = Total Keys Typed / 5
+        # WPM = Total Number of Words / Time Elasped in Minutes
+        # This calculation is rounded down
+        wpm = round((len(current_text) / (time_elapsed / 60)) / 5)
+
+
         # Helps clear the screen because if it doesn't it will repeat the text a ton of times.
         # Not clearing what the previous text says.
         stdscr.clear()
-        display_text(stdscr, target_text, current_text)
+        display_text(stdscr, target_text, current_text, wpm)
         stdscr.refresh()
 
-        key = stdscr.getkey()
+        # "stdscr.getkey() is a block meaning it does nothing unitl user types the key."
+        # try allows to not let program crash. If it does except is executed and continue beings back at while loop.
+        try:
+            key = stdscr.getkey()
+        except:
+            continue
 
         # In ASCII/unicode representation  27 is the number for escape
         if ord(key) == 27:
@@ -61,7 +86,7 @@ def wpm_test(stdscr):
                 # Since current text is keeping track of all the keys being typed.
                 # We want to get rid of the last text being input.
                 current_text.pop()
-        else:
+        elif len(current_text) < len(target_text):
             current_text.append(key)
         
 
